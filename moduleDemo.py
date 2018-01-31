@@ -1,5 +1,5 @@
 import classDemo
 
-classDemo.calc.add(4,7)
+classDemo.Calc.add(4, 7)
 
 
