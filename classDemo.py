@@ -1,5 +1,5 @@
 
-class calc:
+class Calc:
     def add(x,y):
         print(x+y)
 
@@ -13,7 +13,7 @@ class calc:
         print(x/y)
 
 
-calc.add(5,4)
-calc.sub(5,4)
-calc.mul(5,4)
-calc.div(5,4)
+Calc.add(5, 4)
+Calc.sub(5, 4)
+Calc.mul(5, 4)
+Calc.div(5, 4)
