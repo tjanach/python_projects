@@ -33,7 +33,7 @@ def get_data_frames(file, log=True):
 data_frames = get_data_frames(file)
 for flow_name, df in data_frames.items():
      print(3*'*',"Flow", flow_name)
-     print(df.v.describe())
+     print(df.describe(include='all'))
 
 # csvfile = open(file,'r')
 # csvFileArray = []
