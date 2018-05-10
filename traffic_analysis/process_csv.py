@@ -16,7 +16,7 @@ def get_data_frames(file, log=True):
             print("loading od flow:",csvFileArray[i+1][0])
         df = pd.DataFrame({'t':csvFileArray[i][1:-1],'v':csvFileArray[i+1][1:-1]})
         df.v = pd.to_numeric(df.v)
-        df.v = pd.to_numeric(df.v/1000000000)
+        df.v = pd.to_numeric(df.v*8/300000000000)
         df.t = pd.to_datetime(df.t, format='%Y-%m-%d_%H:%M:%S', errors='coerce')
         df.index = df.t
         del df['t']
