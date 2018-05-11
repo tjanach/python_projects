@@ -22,6 +22,7 @@ def get_data_frames(file, log=True):
         del df['t']
         # s = pd.Series(df.v.values, index=df['t'].values)
         data_frames[csvFileArray[i+1][0]] = df
+        print(type(df))
 
     csvfile.close()
 

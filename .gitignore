@@ -175,3 +175,7 @@ ENV/
     About
 
 
+/traffic_analysis/Report Core Routers_1D.csv
+/traffic_analysis/Report Core Routers_5Min.csv
+/traffic_analysis/TJMainReport_1D.csv
+/traffic_analysis/TJMainReport_5Min.csv
