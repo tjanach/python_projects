@@ -3,8 +3,11 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import process_csv
+import textwrap as tw
+import fbprophet
 
 from statsmodels.tsa.stattools import adfuller
+
 def test_stationarity(timeseries):
 
     #Determing rolling statistics
@@ -31,9 +34,10 @@ def test_stationarity(timeseries):
 
 file_small = "traffic_ex_small_data.csv"
 file = "traffic_ex_data.csv"
+indent=5*' '+"---"
 
-# data_frames = process_csv.get_data_frames(file_small)
-data_frames = process_csv.get_data_frames(file)
+data_frames = process_csv.get_data_frames(file_small, False)
+#data_frames = process_csv.get_data_frames(file)
 
 # sFB = data_frames['Facebo-d5dc01 (B)']
 # print(type(sFB))
@@ -41,10 +45,53 @@ data_frames = process_csv.get_data_frames(file)
 # plt.figure()
 # test_stationarity(sFB)
 # plt.show()
+def zeros(ts):
+    zero_ts = ts[ts==0.0]
+    print(indent,"zeros count", len(zero_ts))
+    return(not zero_ts.empty)
 
-for flow_name, s in data_frames.items():
-    plt.figure()
-    print(3*'*',"Flow", flow_name)
+def size(ts):
+    zero_ts = ts[ts==0.0]
+    print(indent,"zeros count", len(zero_ts))
+    return(not zero_ts.empty)
+
+def process(ts):
+    print(indent,type(ts))
+    print(indent,ts.index)
+    print(indent,ts.values)
+    #print(indent,ts.head(5))
+    print(indent,ts[1])
+    print(indent,ts[3])
+    print(indent,zeros(ts))
+
+def process_data(data_frames, max_nb_ts=len(data_frames)):
+    i = 0
+    for flow_name, s in data_frames.items():
+        print(3*'*',"Flow", flow_name)
+        zeros(s)
+        print(tw.indent(s.describe(include='all').to_string(), prefix = indent+" "))
+        # print(type(s.index.to_series()))
+        # print(tw.indent((s.index.to_series()).describe().to_string(), prefix = indent+" "))
+        gm_prophet = fbprophet.Prophet(changepoint_prior_scale=0.15, weekly_seasonality=True, daily_seasonality=True)
+        gm_prophet.fit(s)
+        future = gm_prophet.make_future_dataframe(periods=365)
+        print(future.tail())
+        forecast = gm_prophet.predict(future)
+        print(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail())
+        gm_prophet.plot(forecast);
+        gm_prophet.plot_components(forecast);
+        i+=1
+        if i==max_nb_ts:
+            break
+
+process_data(data_frames, max_nb_ts=1)
+
+    #plt.figure()
+    #break
+    #print(s[2:5])
+    #print(s.tail(10))
+    #print(type(s))
+    #print(s["2018-05",])
     # print(s.describe(include='all'))
     # mavg = s.rolling(window=1*240).mean()
     # print(s.index)
@@ -53,9 +100,9 @@ for flow_name, s in data_frames.items():
     # print(s.max())
     # plt.plot(s, label=flow_name)
     # plt.plot(mavg, label=flow_name)
-    test_stationarity(s)
-    plt.legend(loc='best')
-    plt.show()
+    #test_stationarity(s)
+    #plt.legend(loc='best')
+    #plt.show()
 
 
 

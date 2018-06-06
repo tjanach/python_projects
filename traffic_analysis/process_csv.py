@@ -11,18 +11,17 @@ def get_data_frames(file, log=True):
             if row[1]:
                 csvFileArray.append(row)
 
-    for i in range(0,csvFileArray.__len__()-1, 2):
+    for i in range(0,len(csvFileArray)-1, 2):
         if log:
             print("loading od flow:",csvFileArray[i+1][0])
-        df = pd.DataFrame({'t':csvFileArray[i][1:-1],'v':csvFileArray[i+1][1:-1]})
-        df.v = pd.to_numeric(df.v)
-        df.v = pd.to_numeric(df.v*8/300000000000)
-        df.t = pd.to_datetime(df.t, format='%Y-%m-%d_%H:%M:%S', errors='coerce')
-        df.index = df.t
-        del df['t']
-        # s = pd.Series(df.v.values, index=df['t'].values)
+        df = pd.DataFrame({'ds':csvFileArray[i][1:-1],'y':csvFileArray[i+1][1:-1]})
+        df.y = pd.to_numeric(df.y)
+        df.y = pd.to_numeric(df.y*8/300000000000)
+        df.ds = pd.to_datetime(df.ds, format='%Y-%m-%d_%H:%M:%S', errors='coerce')
+        df.index = df.ds
+        # del df['ds']
         data_frames[csvFileArray[i+1][0]] = df
-        print(type(df))
+        #print(type(df))
 
     csvfile.close()
 
