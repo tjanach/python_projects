@@ -74,7 +74,7 @@ def process_data(data_frames, max_nb_ts=len(data_frames)):
         # print(tw.indent((s.index.to_series()).describe().to_string(), prefix = indent+" "))
         gm_prophet = fbprophet.Prophet(changepoint_prior_scale=0.15, weekly_seasonality=True, daily_seasonality=True)
         gm_prophet.fit(s)
-        future = gm_prophet.make_future_dataframe(periods=365)
+        future = gm_prophet.make_future_dataframe(periods=365, freq='5min')
         print(future.tail())
         forecast = gm_prophet.predict(future)
         print(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail())
